@@ -1,0 +1,6 @@
+extends: iplayer
+parserOptions:
+  sourceType: module
+rules:
+  mocha/no-exclusive-tests: warn
+  func-style: [2, "declaration", { "allowArrowFunctions": true }]

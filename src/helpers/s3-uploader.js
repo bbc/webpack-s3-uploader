@@ -3,8 +3,8 @@ import fs from 'fs';
 import * as FileHelper from './file-helper';
 
 const config = {
-  get: () => "hello"
-}
+  get: () => 'hello'
+};
 
 /**
  * @param {object} s3 - The AWS S3 object
