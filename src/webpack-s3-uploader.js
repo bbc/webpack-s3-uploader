@@ -4,6 +4,21 @@ import * as S3Uploader from './helpers/s3-uploader';
  * Webpack plugin for pushing assets up to s3
  */
 class WebpackS3Uploader {
+  constructor(options={}) {
+    this.options = {
+      whitelist: options.whitelist,
+      logger: options.logger || null,
+      debug: option.debug || false,
+      s3Options: {
+        ...options.s3Options
+      },
+      s3UploadOptions: {
+        ...options.s3UploadOptions
+      },
+      basePath: options.basePath || null,
+      directory: options.directory
+    };
+  }
 
   /**
    * @param {object} compiler - The webpack compiler object
