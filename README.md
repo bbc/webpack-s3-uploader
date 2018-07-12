@@ -2,7 +2,7 @@
 Webpack plugin to push assets to s3
 
 #### Context
-There are already a number of webpack plugins out in the wild that can push assets to S3, so you might be wondering why we rolled out our own. In very simple terms, we had issues with all the other ones and the effort involved in just creating our own highly outweighed the efford we were putting into debugging the existing ones.
+There are already a number of webpack plugins out in the wild that can push assets to S3, so you might be wondering why we rolled out our own. In very simple terms, we had issues with all the other ones and the effort involved in just creating our own highly outweighed the effort we were putting into debugging the existing ones.
 
 #### Usage
 In `webpack.config.js`:
