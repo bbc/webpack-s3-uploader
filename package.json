@@ -1,5 +1,5 @@
 {
-  "name": "webpack-s3-uploader",
+  "name": "@bbc/webpack-s3-uploader",
   "version": "1.0.0",
   "description": "Webpack plugin to push assets to s3",
   "main": "dist/webpack-s3-uploader.js",
