@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/%40bbc%2Fwebpack-s3-uploader.svg)](https://badge.fury.io/js/%40bbc%2Fwebpack-s3-uploader)
+
 # webpack-s3-uploader
 Webpack plugin to push assets to s3
 
