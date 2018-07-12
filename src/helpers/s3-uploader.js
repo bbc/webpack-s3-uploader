@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const FileHelper = require('./file-helper');
+import AWS from 'aws-sdk';
+import fs from 'fs';
+import * as FileHelper from './file-helper';
 
 const config = {
   get: () => "hello"
@@ -17,7 +17,7 @@ const config = {
 const pushFile = (s3, dir, file) => {
   return new Promise((resolve, reject) => {
     fs.readFile(`${dir}/${file}`, (err, data) => {
-      if (err) { 
+      if (err) {
         return reject(err);
       }
 
@@ -35,16 +35,15 @@ const pushFile = (s3, dir, file) => {
         CacheControl: config.get('s3.cacheControl'),
         ContentType: FileHelper.getContentType(file),
         Body: base64data
-       }, err => {
-          if (err) { 
-            return reject(err);
-          }
-          resolve({
-            uploadSuccess: true,
-            message: 'Successfully uploaded: ' + file
-          });
+      }, (err) => {
+        if (err) {
+          return reject(err);
         }
-      );
+        resolve({
+          uploadSuccess: true,
+          message: 'Successfully uploaded: ' + file
+        });
+      });
     });
   });
 };
@@ -56,7 +55,7 @@ const pushFile = (s3, dir, file) => {
  * assets up to S3.
  * @return Promise
  */
-const upload = (dir, compilation) => {
+export const upload = (dir, compilation) => {
   const { assets } = compilation;
 
   const s3 = new AWS.S3({
@@ -68,14 +67,10 @@ const upload = (dir, compilation) => {
   });
 
   return new Promise((resolve, reject) => {
-    const filePromises = Object.keys(assets).filter(FileHelper.isValidFile).map(file => pushFile(s3, dir, file));
+    const filePromises = Object.keys(assets).filter(FileHelper.isValidFile).map((file) => pushFile(s3, dir, file));
 
     Promise.all(filePromises)
-      .then(files => resolve({ files, message: 'Successfully uploaded files' }))
-      .catch(err => reject({ message: err.message }));
+      .then((files) => resolve({ files, message: 'Successfully uploaded files' }))
+      .catch((err) => reject({ message: err.message }));
   });
-}
-
-module.exports = {
-  upload
 };

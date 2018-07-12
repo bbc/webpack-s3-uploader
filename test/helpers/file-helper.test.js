@@ -1,5 +1,5 @@
-const FileHelper = require('../../src/helpers/file-helper');
-const { expect } = require('chai');
+import * as FileHelper from '../../src/helpers/file-helper';
+import { expect } from 'chai';
 
 describe('--- FileHelper ---', () => {
 

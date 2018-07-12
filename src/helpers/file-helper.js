@@ -1,21 +1,21 @@
-// File extensions we don't want to upload to s3
-const EXTENSION_WHITELIST = ['js', 'css', 'map'];
+// File extensions we want to upload to s3
+const EXTENSION_WHITELIST = ['js', 'css', 'map', 'svg', 'ico', 'png'];
 
 /**
  * @param {string} file - The file name
  * Outputs extension of a file
  * @return string
  */
-const getExtension = file => {
+export const getExtension = (file) => {
   return file.split('.').pop();
 };
 
 /**
  * @param {string} file - The file name
- * Validates the file extension against the blacklist
+ * Validates the file extension against the whitelist
  * @return bool
  */
-const isValidFile = file => {
+export const isValidFile = (file) => {
   const extension = getExtension(file);
   return EXTENSION_WHITELIST.indexOf(extension) >= 0;
 };
@@ -25,7 +25,7 @@ const isValidFile = file => {
  * Outputs the content type of the file
  * @return string
  */
-const getContentType = file => {
+export const getContentType = (file) => {
   if (getExtension(file) === 'js') {
     return 'application/javascript';
   }
@@ -35,10 +35,4 @@ const getContentType = file => {
   }
 
   return 'application/octet-stream';
-};
-
-module.exports = {
-  getExtension,
-  isValidFile,
-  getContentType
 };
