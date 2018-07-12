@@ -9,7 +9,7 @@ const WebpackS3Uploader = require('@bbc/webpack-s3-uploader');
 {
   ...
   plugins: [
-    new S3UploadPlugin({
+    new WebpackS3Uploader({
       whitelist: ['js', 'css'],
       logger: console,
       basePath: 'webpack/assets',
