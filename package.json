@@ -33,10 +33,10 @@
     "aws-sdk": "^2.273.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.53",
+    "@babel/preset-env": "^7.0.0-beta.53",
     "@babel/register": "v7.0.0-beta.44",
-    "babel-loader": "^7.1.5",
+    "babel-loader": "^8.0.0-beta",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.19",
     "eslint": "^4.19.1",

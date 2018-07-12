@@ -7,7 +7,7 @@ class WebpackS3Uploader {
   constructor(options = {}) {
     this.options = {
       whitelist: options.whitelist,
-      logger: options.logger || null,
+      logger: options.logger || undefined,
       s3Options: {
         ...options.s3Options
       },
@@ -17,6 +17,14 @@ class WebpackS3Uploader {
       basePath: options.basePath || '',
       directory: options.directory
     };
+
+    if (!this.options.whitelist) {
+      throw new Error('WebpackS3Uploader: `whitelist` is a required option');
+    }
+
+    if (!this.options.directory) {
+      throw new Error('WebpackS3Uploader: `directory` is a required option');
+    }
   }
 
   /**

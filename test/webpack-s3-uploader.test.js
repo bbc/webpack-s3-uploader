@@ -5,17 +5,47 @@ import * as S3Uploader from '../src/helpers/s3-uploader';
 
 const sandbox = sinon.createSandbox();
 
+const defaultOptions = {
+  whitelist: ['js', 'css'],
+  directory: './web/assets',
+  s3Options: {
+    region: 'eu-west-1'
+  },
+  s3UploadOptions: {
+    ACL: 'public-read'
+  }
+};
+
 const options = {
-  whitelist: ['js'],
+  ...defaultOptions,
   logger: console,
-  basePath: 'webpack',
-  directory: `${__dirname}/../fixtures`
+  basePath: 'webpack'
 };
 
 describe('--- WebpackS3Uploader ---', () => {
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  describe('constructor', () => {
+
+    it('throws an error when missing `whitelist` options', () => {
+      expect(() => new WebpackS3Uploader()).to.throw('WebpackS3Uploader: `whitelist` is a required option');
+    });
+
+    it('throws an error when missing `directory` options', () => {
+      expect(() => new WebpackS3Uploader({
+        whitelist: ['js']
+      })).to.throw('WebpackS3Uploader: `directory` is a required option');
+    });
+
+    it('set\'s up default options', () => {
+      const plugin = new WebpackS3Uploader(defaultOptions);
+      expect(plugin.options.logger).to.be.undefined;
+      expect(plugin.options.basePath).to.equal('');
+    });
+
   });
 
   describe('apply', () => {
@@ -77,7 +107,7 @@ describe('--- WebpackS3Uploader ---', () => {
         })
       };
 
-      const plugin = new WebpackS3Uploader(options);
+      const plugin = new WebpackS3Uploader(defaultOptions);
 
       plugin.apply(compilerMock);
     });
