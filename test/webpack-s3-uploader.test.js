@@ -5,6 +5,13 @@ import * as S3Uploader from '../src/helpers/s3-uploader';
 
 const sandbox = sinon.createSandbox();
 
+const options = {
+  whitelist: ['js'],
+  logger: console,
+  basePath: 'webpack',
+  directory: `${__dirname}/../fixtures`
+};
+
 describe('--- WebpackS3Uploader ---', () => {
 
   afterEach(() => {
@@ -14,7 +21,7 @@ describe('--- WebpackS3Uploader ---', () => {
   describe('apply', () => {
 
     it('adds a callback to the after-emit event', () => {
-      const plugin = new WebpackS3Uploader();
+      const plugin = new WebpackS3Uploader(options);
       const compilerMock = {
         plugin: sandbox.spy()
       };
@@ -46,7 +53,7 @@ describe('--- WebpackS3Uploader ---', () => {
         })
       };
 
-      const plugin = new WebpackS3Uploader();
+      const plugin = new WebpackS3Uploader(options);
 
       plugin.apply(compilerMock);
     });
@@ -70,7 +77,7 @@ describe('--- WebpackS3Uploader ---', () => {
         })
       };
 
-      const plugin = new WebpackS3Uploader();
+      const plugin = new WebpackS3Uploader(options);
 
       plugin.apply(compilerMock);
     });

@@ -1,6 +1,3 @@
-// File extensions we want to upload to s3
-const EXTENSION_WHITELIST = ['js', 'css', 'map', 'svg', 'ico', 'png'];
-
 /**
  * @param {string} file - The file name
  * Outputs extension of a file
@@ -15,9 +12,9 @@ export const getExtension = (file) => {
  * Validates the file extension against the whitelist
  * @return bool
  */
-export const isValidFile = (file) => {
+export const isValidFile = (file, whitelist) => {
   const extension = getExtension(file);
-  return EXTENSION_WHITELIST.indexOf(extension) >= 0;
+  return whitelist.indexOf(extension) >= 0;
 };
 
 /**

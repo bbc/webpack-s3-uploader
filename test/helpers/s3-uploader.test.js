@@ -14,6 +14,13 @@ const compilationMock = {
   }
 };
 
+const options = {
+  whitelist: ['js'],
+  logger: console,
+  basePath: 'webpack',
+  directory: `${__dirname}/../fixtures`
+};
+
 describe('--- S3Uploader ---', () => {
 
   afterEach(() => {
@@ -34,7 +41,7 @@ describe('--- S3Uploader ---', () => {
 
       it('validates the files before uploading', (done) => {
         sandbox.spy(FileHelper, 'isValidFile');
-        S3Uploader.upload(`${__dirname}/../fixtures`, compilationMock)
+        S3Uploader.upload(options, compilationMock)
           .then((data) => {
             expect(FileHelper.isValidFile.called).to.be.true;
             expect(data).to.deep.equal({
@@ -65,7 +72,7 @@ describe('--- S3Uploader ---', () => {
 
       it('errors when the upload fails', (done) => {
         sandbox.spy(FileHelper, 'isValidFile');
-        S3Uploader.upload(`${__dirname}/../fixtures`, compilationMock)
+        S3Uploader.upload(options, compilationMock)
           .catch((err) => {
             expect(err.message).to.equal(errorMessage);
             done();
@@ -82,7 +89,7 @@ describe('--- S3Uploader ---', () => {
       });
 
       it('errors when a file fails to read properly', (done) => {
-        S3Uploader.upload(`${__dirname}/../fixtures`, compilationMock)
+        S3Uploader.upload(options, compilationMock)
           .catch((err) => {
             expect(err.message).to.equal(errorMessage);
             done();
