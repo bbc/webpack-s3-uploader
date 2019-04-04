@@ -9,12 +9,17 @@ describe('--- FileHelper ---', () => {
       expect(FileHelper.getExtension('iamafile.png')).to.equal('png');
     });
 
-    it('returns the correct file for multiple dots in filename', () => {
+    it('returns the correct file extension for multiple dots in filename', () => {
       expect(FileHelper.getExtension('iamafile.whateves.hola.map')).to.equal('map');
     });
 
     it('returns filename when no file extension', () => {
-      expect(FileHelper.getExtension('iamafilewithnoextension')).to.equal('iamafilewithnoextension');
+      expect(FileHelper.getExtension('filewithnoextension')).to.equal('filewithnoextension');
+    });
+
+    it('returns the correct file extension if the string is not normalised', () => {
+      expect(FileHelper.getExtension('hello.JS')).to.equal('js');
+      expect(FileHelper.getExtension('hello.Js     ')).to.equal('js');
     });
 
   });
@@ -36,11 +41,6 @@ describe('--- FileHelper ---', () => {
 
     it('returns false for an invalid file name', () => {
       expect(FileHelper.isValidFile('hello.json', WHITELIST)).to.be.false;
-    });
-
-    it('returns true for a valid file name with non normalised extension', () => {
-      expect(FileHelper.isValidFile('hello.js', WHITELIST)).to.be.true;
-      expect(FileHelper.isValidFile('hello.JS     ', WHITELIST)).to.be.true;
     });
 
   });

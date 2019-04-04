@@ -4,7 +4,7 @@
  * @return string
  */
 export const getExtension = (file) => {
-  return file.split('.').pop();
+  return file.split('.').pop().toLowerCase().trim();
 };
 
 /**
@@ -13,7 +13,7 @@ export const getExtension = (file) => {
  * @return bool
  */
 export const isValidFile = (file, whitelist) => {
-  const extension = getExtension(file).toLowerCase().trim();
+  const extension = getExtension(file);
   return whitelist.includes(extension);
 };
 
