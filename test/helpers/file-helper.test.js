@@ -38,6 +38,11 @@ describe('--- FileHelper ---', () => {
       expect(FileHelper.isValidFile('hello.json', WHITELIST)).to.be.false;
     });
 
+    it('returns true for a valid file name with non normalised extension', () => {
+      expect(FileHelper.isValidFile('hello.js', WHITELIST)).to.be.true;
+      expect(FileHelper.isValidFile('hello.JS     ', WHITELIST)).to.be.true;
+    });
+
   });
 
   describe('.getContentType()', () => {

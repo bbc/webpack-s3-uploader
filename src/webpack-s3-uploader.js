@@ -21,6 +21,12 @@ export default class WebpackS3Uploader {
     if (!this.options.directory) {
       throw new Error('WebpackS3Uploader: `directory` is a required option');
     }
+
+    if (!Array.isArray(this.options.whitelist)) {
+      throw new Error('WebpackS3Uploader: `whitelist` must be an array of strings');
+    }
+
+    this.options.whitelist = this.options.whitelist.map((e) => e.toLowerCase().trim());
   }
 
   /**

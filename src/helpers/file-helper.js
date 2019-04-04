@@ -13,7 +13,7 @@ export const getExtension = (file) => {
  * @return bool
  */
 export const isValidFile = (file, whitelist) => {
-  const extension = getExtension(file);
+  const extension = getExtension(file).toLowerCase().trim();
   return whitelist.includes(extension);
 };
 
