@@ -51,12 +51,12 @@ describe('--- FileHelper ---', () => {
       expect(FileHelper.getContentType('hello.js')).to.equal('application/javascript');
     });
 
-    it('returns the content type for a .css file', () => {
-      expect(FileHelper.getContentType('hello.css')).to.equal('text/css');
+    it('returns the content type for a .map file', () => {
+      expect(FileHelper.getContentType('hello.map')).to.equal('application/json');
     });
 
     it('returns the default content type for any other file', () => {
-      expect(FileHelper.getContentType('hello.json')).to.equal('application/json');
+      expect(FileHelper.getContentType('hello.any')).to.equal('application/octet-stream');
     });
 
   });

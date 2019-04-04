@@ -44,9 +44,9 @@ const mimeTypes = {
   svg: 'image/svg+xml',
   // JavaScript
   js: 'application/javascript',
-  // Javascript MAP file
-  map: 'application/javascript',
-  // JJavaScript Object Notation
+  // Source MAP (for JS and CSS)
+  map: 'application/json',
+  // JavaScript Object Notation
   json: 'application/json',
   // Small Web Format (or Adobe Flash document)
   swf: 'application/x-shockwave-flash',
