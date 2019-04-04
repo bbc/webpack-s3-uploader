@@ -51,7 +51,7 @@ describe('--- FileHelper ---', () => {
     });
 
     it('returns the default content type for any other file', () => {
-      expect(FileHelper.getContentType('hello.json')).to.equal('application/octet-stream');
+      expect(FileHelper.getContentType('hello.json')).to.equal('application/json');
     });
 
   });

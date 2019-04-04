@@ -14,8 +14,47 @@ export const getExtension = (file) => {
  */
 export const isValidFile = (file, whitelist) => {
   const extension = getExtension(file);
-  return whitelist.indexOf(extension) >= 0;
+  return whitelist.includes(extension);
 };
+
+const mimeTypes = {
+  // HyperText Markup Language
+  htm: 'text/html',
+  html: 'text/html',
+  // Cascading Style Sheets
+  css: 'text/css',
+  // Comma-separated values
+  csv: 'text/csv',
+  // OpenType font
+  otf: 'font/otf',
+  // TrueType Font
+  ttf: 'font/ttf',
+  // Web Open Font Format (WOFF)
+  woff: 'font/woff',
+  // Web Open Font Format (WOFF)
+  woff2: 'font/woff2',
+  // Graphics Interchange Format
+  gif: 'image/gif',
+  // Portable Network Graphics
+  png: 'image/png',
+  // JPEG images
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  // Scalable Vector Graphics
+  svg: 'image/svg+xml',
+  // JavaScript
+  js: 'application/javascript',
+  // Javascript MAP file
+  map: 'application/javascript',
+  // JJavaScript Object Notation
+  json: 'application/json',
+  // Small Web Format (or Adobe Flash document)
+  swf: 'application/x-shockwave-flash',
+  // MS Embedded OpenType fonts
+  eot: 'application/vnd.ms-fontobject'
+};
+
+const DEFAULT_MIME_TYPE = 'application/octet-stream';
 
 /**
  * @param {string} file - The file name
@@ -23,13 +62,13 @@ export const isValidFile = (file, whitelist) => {
  * @return string
  */
 export const getContentType = (file) => {
-  if (getExtension(file) === 'js') {
-    return 'application/javascript';
+  const extension = getExtension(file);
+  const mimeType = mimeTypes[extension];
+  // if the mime type is defined in the mapping
+  if (mimeType) {
+    // return it
+    return mimeType;
   }
-
-  if (getExtension(file) === 'css') {
-    return 'text/css';
-  }
-
-  return 'application/octet-stream';
+  // otherwise return the default one
+  return DEFAULT_MIME_TYPE;
 };

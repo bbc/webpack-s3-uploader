@@ -1,3 +1,34 @@
 {
-	"presets": [ "@babel/preset-env" ]
+  "presets": [
+    [
+      "@babel/preset-env", {
+        "modules": false,
+        "debug": true,
+        "useBuiltIns": "usage",
+        "corejs": {
+          "version": "3"
+        },
+        "targets": {
+          "node": "10"
+        }
+      }
+    ]
+  ],
+  "env": {
+    "unittest": {
+      "presets": [
+        [
+          "@babel/preset-env", {
+            "useBuiltIns": "usage",
+            "corejs": {
+              "version": "3"
+            },
+            "targets": {
+              "node": "10"
+            }
+          }
+        ]
+      ]
+    }
+  }
 }

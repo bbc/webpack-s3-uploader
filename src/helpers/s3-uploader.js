@@ -19,7 +19,7 @@ const pushFile = (options, s3, file) => {
       }
 
       // S3 expects raw data
-      const base64data = new Buffer(data, 'binary');
+      const base64data = Buffer.from(data, 'binary');
 
       // Asset key
       const key = `${basePath}/${file}`;
