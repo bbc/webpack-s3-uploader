@@ -26,6 +26,7 @@ export default class WebpackS3Uploader {
       throw new Error('WebpackS3Uploader: `whitelist` must be an array of strings');
     }
 
+    // Normalise the whitelist by making the elements all lower case, without white spaces
     this.options.whitelist = this.options.whitelist.map((e) => e.toLowerCase().trim());
   }
 
