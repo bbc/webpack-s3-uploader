@@ -29,7 +29,7 @@ describe('--- WebpackS3Uploader ---', () => {
         expect(plugin.options.whitelist).to.be.deep.equal(['js', 'css', 'map']);
       });
 
-      it('should throw if the whitelist is not an array', () => {
+      it('should throw an error if the whitelist is not an array', () => {
         expect(() => new WebpackS3Uploader({
           ...options,
           whitelist: {}
