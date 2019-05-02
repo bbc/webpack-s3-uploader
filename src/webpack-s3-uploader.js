@@ -23,11 +23,33 @@ export default class WebpackS3Uploader {
     }
 
     if (!Array.isArray(this.options.whitelist)) {
-      throw new Error('WebpackS3Uploader: `whitelist` must be an array of strings');
+      throw new Error(
+        'WebpackS3Uploader: `whitelist` must be an array of strings'
+      );
     }
 
     // Normalise the whitelist by making the elements all lower case, without white spaces
-    this.options.whitelist = this.options.whitelist.map((e) => e.toLowerCase().trim());
+    this.options.whitelist = this.options.whitelist.map(e =>
+      e.toLowerCase().trim()
+    );
+  }
+
+  async callback(compilation) {
+    const { logger } = this.options;
+
+    if (logger) {
+      logger.info('============ Uploading files to S3 ============');
+    }
+
+    try {
+      const success = await S3Uploader.upload(this.options, compilation);
+      if (logger) {
+        logger.info('============ Successfully uploaded files ============');
+        logger.info(success);
+      }
+    } catch (e) {
+      compilation.errors.push(new Error(`WebpackS3Uploader: ${e.message}`));
+    }
   }
 
   /**
@@ -36,23 +58,6 @@ export default class WebpackS3Uploader {
    * @param {object} compiler - The webpack compiler object
    */
   apply(compiler) {
-    compiler.hooks.afterEmit.tap('Webpack S3 Uploader Plugin', async (compilation) => {
-      const { logger } = this.options;
-
-      if (logger) {
-        logger.info('============ Uploading files to S3 ============');
-      }
-
-      try {
-        const success = await S3Uploader.upload(this.options, compilation);
-        if (logger) {
-          logger.info('============ Successfully uploaded files ============');
-          logger.info(success);
-        }
-      } catch (e) {
-        compilation.errors.push(new Error(`WebpackS3Uploader: ${e.message}`));
-      }
-    });
+    compiler.hooks.afterEmit.tap('Webpack S3 Uploader Plugin', this.callback);
   }
-
 }

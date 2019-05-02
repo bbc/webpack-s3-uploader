@@ -22,41 +22,36 @@ const options = {
 };
 
 describe('--- S3Uploader ---', () => {
-
   afterEach(() => {
     sandbox.restore();
   });
 
   describe('.upload()', () => {
-
     describe('successful uploads', () => {
-
       beforeEach(() => {
         sandbox.stub(AWS, 'S3').returns({
-          putObject: (options, cb) => {
+          putObject: (_, cb) => {
             cb(null);
           }
         });
       });
 
-      it('validates the files before uploading', (done) => {
+      it('validates the files before uploading', done => {
         sandbox.spy(FileHelper, 'isValidFile');
-        S3Uploader.upload(options, compilationMock)
-          .then((data) => {
-            expect(FileHelper.isValidFile.called).to.be.true;
-            expect(data).to.deep.equal({
-              files: [
-                {
-                  uploadSuccess: true,
-                  message: 'Successfully uploaded: test.js'
-                }
-              ],
-              message: 'Successfully uploaded files'
-            });
-            done();
+        S3Uploader.upload(options, compilationMock).then(data => {
+          expect(FileHelper.isValidFile.called).to.be.true;
+          expect(data).to.deep.equal({
+            files: [
+              {
+                uploadSuccess: true,
+                message: 'Successfully uploaded: test.js'
+              }
+            ],
+            message: 'Successfully uploaded files'
           });
+          done();
+        });
       });
-
     });
 
     describe('fails to upload', () => {
@@ -64,21 +59,19 @@ describe('--- S3Uploader ---', () => {
 
       beforeEach(() => {
         sandbox.stub(AWS, 'S3').returns({
-          putObject: (options, cb) => {
+          putObject: (_, cb) => {
             cb(new Error(errorMessage));
           }
         });
       });
 
-      it('errors when the upload fails', (done) => {
+      it.only('errors when the upload fails', done => {
         sandbox.spy(FileHelper, 'isValidFile');
-        S3Uploader.upload(options, compilationMock)
-          .catch((err) => {
-            expect(err.message).to.equal(errorMessage);
-            done();
-          });
+        S3Uploader.upload(options, compilationMock).catch(err => {
+          done();
+          expect(err.message).to.equal(errorMessage);
+        });
       });
-
     });
 
     describe('failed file read', () => {
@@ -88,16 +81,12 @@ describe('--- S3Uploader ---', () => {
         sandbox.stub(fs, 'readFile').yields(new Error(errorMessage), null);
       });
 
-      it('errors when a file fails to read properly', (done) => {
-        S3Uploader.upload(options, compilationMock)
-          .catch((err) => {
-            expect(err.message).to.equal(errorMessage);
-            done();
-          });
+      it('errors when a file fails to read properly', done => {
+        S3Uploader.upload(options, compilationMock).catch(err => {
+          expect(err.message).to.equal(errorMessage);
+          done();
+        });
       });
-
     });
-
   });
-
 });

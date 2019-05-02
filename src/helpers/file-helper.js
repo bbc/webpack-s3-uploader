@@ -3,8 +3,12 @@
  * Outputs extension of a file
  * @return string
  */
-export const getExtension = (file) => {
-  return file.split('.').pop().toLowerCase().trim();
+export const getExtension = file => {
+  return file
+    .split('.')
+    .pop()
+    .toLowerCase()
+    .trim();
 };
 
 /**
@@ -61,7 +65,7 @@ const DEFAULT_MIME_TYPE = 'application/octet-stream';
  * Outputs the content type of the file
  * @return string
  */
-export const getContentType = (file) => {
+export const getContentType = file => {
   const extension = getExtension(file);
   const mimeType = mimeTypes[extension];
   // if the mime type is defined in the mapping

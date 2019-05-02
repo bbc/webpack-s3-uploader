@@ -25,20 +25,23 @@ const pushFile = (options, s3, file) => {
       const key = `${basePath}/${file}`;
 
       // Push object up to s3
-      s3.putObject({
-        ...s3UploadOptions,
-        Key: key,
-        ContentType: FileHelper.getContentType(file),
-        Body: base64data
-      }, (err) => {
-        if (err) {
-          return reject(err);
+      s3.putObject(
+        {
+          ...s3UploadOptions,
+          Key: key,
+          ContentType: FileHelper.getContentType(file),
+          Body: base64data
+        },
+        error => {
+          if (error) {
+            return reject(err);
+          }
+          resolve({
+            uploadSuccess: true,
+            message: `Successfully uploaded: ${file}`
+          });
         }
-        resolve({
-          uploadSuccess: true,
-          message: 'Successfully uploaded: ' + file
-        });
-      });
+      );
     });
   });
 };
@@ -60,11 +63,11 @@ export const upload = (options, compilation) => {
 
   return new Promise((resolve, reject) => {
     const filePromises = Object.keys(assets)
-      .filter((file) => FileHelper.isValidFile(file, whitelist))
-      .map((file) => pushFile(options, s3, file));
+      .filter(file => FileHelper.isValidFile(file, whitelist))
+      .map(file => pushFile(options, s3, file));
 
     Promise.all(filePromises)
-      .then((files) => resolve({ files, message: 'Successfully uploaded files' }))
-      .catch((err) => reject({ message: err.message }));
+      .then(files => resolve({ files, message: 'Successfully uploaded files' }))
+      .catch(err => reject({ message: err.message }));
   });
 };
