@@ -3,28 +3,23 @@ import * as S3Uploader from './helpers/s3-uploader';
 /**
  * Webpack plugin for pushing assets up to s3
  */
-class WebpackS3Uploader {
-  constructor(options = {}) {
-    this.options = {
-      whitelist: options.whitelist,
-      logger: options.logger || undefined,
-      s3Options: {
-        ...options.s3Options
-      },
-      s3UploadOptions: {
-        ...options.s3UploadOptions
-      },
-      basePath: options.basePath || '',
-      directory: options.directory
-    };
+export class WebpackS3Uploader {
 
-    if (!this.options.whitelist) {
-      throw new Error('WebpackS3Uploader: `whitelist` is a required option');
-    }
-
-    if (!this.options.directory) {
-      throw new Error('WebpackS3Uploader: `directory` is a required option');
-    }
+  constructor({
+    logger = null,
+    s3Options = {
+      region: 'eu-west-1'
+    },
+    s3UploadOptions = {
+      ACL: '',
+      Bucket: '',
+      CacheControl: ''
+    },
+    keyNamePrefix = '',
+    assetsDirectory = '',
+    extensions = ['.js', '.css', '.map']
+  } = {}) {
+    this.options = { logger, s3Options, s3UploadOptions, keyNamePrefix, assetsDirectory, extensions };
   }
 
   /**
@@ -35,29 +30,22 @@ class WebpackS3Uploader {
    * @return bool
    */
   apply(compiler) {
-    compiler.plugin('after-emit', (compilation, cb) => {
+    compiler.hooks.afterEmit.tap('Webpack S3 Uploader Plugin', async (compilation) => {
       const { logger } = this.options;
 
       if (logger) {
         logger.info('============ Uploading files to S3 ============');
       }
 
-      S3Uploader.upload(this.options, compilation)
-        .then((success) => {
-          if (logger) {
-            logger.info('============ Successfully uploaded files ============');
-            logger.info(success);
-          }
-
-          cb();
-        })
-        .catch((err) => {
-          compilation.errors.push(new Error(`WebpackS3Uploader: ${err.message}`));
-          cb();
-        });
+      S3Uploader.upload(this.options, compilation).then((success) => {
+        if (logger) {
+          logger.info('============ Successfully uploaded files ============');
+          logger.info(success);
+        }
+      }).catch((e) => {
+        logger.error('============ WITHIN THE CATCH ============');
+        compilation.errors.push(new Error(`WebpackS3Uploader: ${e.message}`)); 
+      });
     });
   }
-
 }
-
-export default WebpackS3Uploader;

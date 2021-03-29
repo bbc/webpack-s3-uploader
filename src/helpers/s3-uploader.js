@@ -43,6 +43,33 @@ const pushFile = (options, s3, file) => {
   });
 };
 
+const test = (key, data, s3, options) => {
+  const { s3UploadOptions } = options;
+
+  console.log('============ test ============');
+  console.log(`key: ${key}`);
+  console.log('============ test ============');
+
+  return new Promise((resolve, reject) => {
+    resolve();
+    // Push object up to s3
+    // s3.putObject({
+    //   ...s3UploadOptions,
+    //   Key: key,
+    //   ContentType: FileHelper.getContentType(key),
+    //   // (node:9560) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+    //   Body: Buffer.from(data, 'binary')
+    // }, (err) => {
+    //   if (err) {
+    //     return reject(err);
+    //   }
+    //   resolve({
+    //     message: `Successfully uploaded: ${file}`
+    //   });
+    // });
+  });
+};
+
 /**
  * @param {object} options - The plugin options
  * @param {object} webpackStats - The webpack stats after build completion
@@ -50,18 +77,21 @@ const pushFile = (options, s3, file) => {
  * assets up to S3.
  * @return Promise
  */
-export const upload = (options, compilation) => {
-  const { whitelist, s3Options } = options;
-  const { assets } = compilation;
+export const upload = (pluginOptions, compilation) => {
+  const { extensions, s3Options, assetsDirectory, keyNamePrefix} = pluginOptions;
+  const { assets, options } = compilation;
 
   const s3 = new AWS.S3({
     ...s3Options
   });
 
+  const assetsFolder = FileHelper.getDiffPath(options.context, options.output.path, assetsDirectory);
+
   return new Promise((resolve, reject) => {
+    resolve({ message: 'Succesfully' })
     const filePromises = Object.keys(assets)
-      .filter((file) => FileHelper.isValidFile(file, whitelist))
-      .map((file) => pushFile(options, s3, file));
+      .filter((file) => FileHelper.isWhitelisted(file, extensions))
+      .map((file) => test(`${keyNamePrefix}/${assetsFolder}/${file}`, assets[file]._value, s3, pluginOptions));
 
     Promise.all(filePromises)
       .then((files) => resolve({ files, message: 'Successfully uploaded files' }))
