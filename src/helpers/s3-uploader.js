@@ -19,6 +19,7 @@ const pushFile = (options, s3, file) => {
       }
 
       // S3 expects raw data
+      // See: https://nodejs.org/api/buffer.html#buffer_static_method_buffer_from_string_encoding
       const base64data = Buffer.from(data, 'binary');
 
       // Asset key
