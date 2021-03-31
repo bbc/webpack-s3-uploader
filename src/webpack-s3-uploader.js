@@ -1,5 +1,7 @@
 import * as S3Uploader from './helpers/s3-uploader';
 
+const PLUGIN_NAME = 'WebpackS3Uploader';
+
 /**
  * Webpack plugin for pushing assets up to s3
  */
@@ -19,11 +21,11 @@ class WebpackS3Uploader {
     };
 
     if (!this.options.whitelist) {
-      throw new Error('WebpackS3Uploader: `whitelist` is a required option');
+      throw new Error(`${PLUGIN_NAME}: "whitelist" is a required option`);
     }
 
     if (!this.options.directory) {
-      throw new Error('WebpackS3Uploader: `directory` is a required option');
+      throw new Error(`${PLUGIN_NAME}: "directory" is a required option`);
     }
   }
 
@@ -35,26 +37,19 @@ class WebpackS3Uploader {
    * @return bool
    */
   apply(compiler) {
-    compiler.plugin('after-emit', (compilation, cb) => {
-      const { logger } = this.options;
+    compiler.hooks.emit.tapAsync(PLUGIN_NAME, (compilation, next) => {
+      const logger = compilation.getLogger(PLUGIN_NAME);
 
-      if (logger) {
-        logger.info('============ Uploading files to S3 ============');
-      }
-
-      S3Uploader.upload(this.options, compilation)
-        .then((success) => {
-          if (logger) {
-            logger.info('============ Successfully uploaded files ============');
-            logger.info(success);
-          }
-
-          cb();
-        })
-        .catch((err) => {
-          compilation.errors.push(new Error(`WebpackS3Uploader: ${err.message}`));
-          cb();
-        });
+      S3Uploader.upload(this.options, compilation).then((success) => {
+        logger.info('Successfully uploaded the following files');
+        success.forEach(file => logger.info(file));
+        next();
+      }).catch((error) => {
+        const message = `${PLUGIN_NAME}: ${error.message}`;
+        logger.error(message);
+        compilation.errors.push(new Error(message));
+        next();
+      });
     });
   }
 
