@@ -34,16 +34,19 @@ class WebpackS3Uploader {
    * @param {object} compiler the webpack compiler object that allows to hook into the webpack events.
    */
   apply(compiler) {
-    compiler.hooks.afterEmit.tap(PLUGIN_NAME, (compilation) => {
+    compiler.hooks.done.tapAsync(PLUGIN_NAME, (stats, callback) => {
+      const { compilation } = stats;
       const logger = compilation.getLogger(PLUGIN_NAME);
 
       S3Uploader.upload(this.options, compilation).then((success) => {
-        console.log('Successfully uploaded the following files');
-        success.forEach((file) => console.log(file));
+        logger.info('Successfully uploaded the following files');
+        success.forEach((file) => logger.info(file));
+        callback();
       }).catch((error) => {
         const message = `${PLUGIN_NAME}: ${error.message}`;
-        console.log(message);
+        logger.error(message);
         compilation.errors.push(new Error(message));
+        callback();
       });
     });
   }
