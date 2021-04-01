@@ -37,18 +37,16 @@ class WebpackS3Uploader {
    * @return bool
    */
   apply(compiler) {
-    compiler.hooks.emit.tapAsync(PLUGIN_NAME, (compilation, next) => {
+    compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
       const logger = compilation.getLogger(PLUGIN_NAME);
 
       S3Uploader.upload(this.options, compilation).then((success) => {
         logger.info('Successfully uploaded the following files');
         success.forEach((file) => logger.info(file));
-        next();
       }).catch((error) => {
         const message = `${PLUGIN_NAME}: ${error.message}`;
         logger.error(message);
         compilation.errors.push(new Error(message));
-        next();
       });
     });
   }
