@@ -44,19 +44,10 @@ describe('--- S3Uploader ---', () => {
         S3Uploader.upload(options, compilationMock)
           .then((data) => {
             expect(FileHelper.isValidFile.called).to.be.true;
-            expect(data).to.deep.equal({
-              files: [
-                {
-                  uploadSuccess: true,
-                  message: 'Successfully uploaded: test.js'
-                }
-              ],
-              message: 'Successfully uploaded files'
-            });
+            expect(data).to.deep.equal([ 'test.js' ]);
             done();
           });
       });
-
     });
 
     describe('fails to upload', () => {
