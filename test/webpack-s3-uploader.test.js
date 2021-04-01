@@ -54,14 +54,14 @@ describe('--- WebpackS3Uploader ---', () => {
       const compilerMock = {
         hooks: {
           emit: {
-            tapAsync: sandbox.spy()
+            tap: sandbox.spy()
           }
         }
       };
 
       plugin.apply(compilerMock);
 
-      expect(compilerMock.hooks.emit.tapAsync.called).to.be.true;
+      expect(compilerMock.hooks.emit.tap.called).to.be.true;
     });
 
   });
