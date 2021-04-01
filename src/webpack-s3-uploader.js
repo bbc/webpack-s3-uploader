@@ -42,7 +42,7 @@ class WebpackS3Uploader {
 
       S3Uploader.upload(this.options, compilation).then((success) => {
         logger.info('Successfully uploaded the following files');
-        success.forEach(file => logger.info(file));
+        success.forEach((file) => logger.info(file));
         next();
       }).catch((error) => {
         const message = `${PLUGIN_NAME}: ${error.message}`;

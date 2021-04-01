@@ -1,7 +1,6 @@
 import sinon from 'sinon';
 import { expect } from 'chai';
 import WebpackS3Uploader from '../src/webpack-s3-uploader';
-import * as S3Uploader from '../src/helpers/s3-uploader';
 
 const sandbox = sinon.createSandbox();
 
