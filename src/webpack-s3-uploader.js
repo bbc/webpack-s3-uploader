@@ -38,11 +38,11 @@ class WebpackS3Uploader {
       const logger = compilation.getLogger(PLUGIN_NAME);
 
       S3Uploader.upload(this.options, compilation).then((success) => {
-        logger.info('Successfully uploaded the following files');
-        success.forEach((file) => logger.info(file));
+        console.log('Successfully uploaded the following files');
+        success.forEach((file) => console.log(file));
       }).catch((error) => {
         const message = `${PLUGIN_NAME}: ${error.message}`;
-        logger.error(message);
+        console.log(message);
         compilation.errors.push(new Error(message));
       });
     });
