@@ -30,14 +30,11 @@ class WebpackS3Uploader {
   }
 
   /**
-   * @param {object} compiler - The webpack compiler object
-   * Allows us to tap into the compiler events.
-   * Used for adding a hook in for after assets are built.
-   * We can then push these files up to s3
-   * @return bool
+   * It uploads the emitted files to s3
+   * @param {object} compiler the webpack compiler object that allows to hook into the webpack events.
    */
   apply(compiler) {
-    compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
+    compiler.hooks.afterEmit.tap(PLUGIN_NAME, (compilation) => {
       const logger = compilation.getLogger(PLUGIN_NAME);
 
       S3Uploader.upload(this.options, compilation).then((success) => {
@@ -50,6 +47,11 @@ class WebpackS3Uploader {
       });
     });
   }
+
+
+
+
+
 
 }
 

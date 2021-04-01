@@ -53,7 +53,7 @@ describe('--- WebpackS3Uploader ---', () => {
       const plugin = new WebpackS3Uploader(options);
       const compilerMock = {
         hooks: {
-          emit: {
+          afterEmit: {
             tap: sandbox.spy()
           }
         }
@@ -61,7 +61,7 @@ describe('--- WebpackS3Uploader ---', () => {
 
       plugin.apply(compilerMock);
 
-      expect(compilerMock.hooks.emit.tap.called).to.be.true;
+      expect(compilerMock.hooks.afterEmit.tap.called).to.be.true;
     });
 
   });
