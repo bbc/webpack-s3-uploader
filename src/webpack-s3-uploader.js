@@ -47,12 +47,6 @@ class WebpackS3Uploader {
       });
     });
   }
-
-
-
-
-
-
 }
 
 export default WebpackS3Uploader;
