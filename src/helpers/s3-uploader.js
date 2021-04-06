@@ -19,7 +19,8 @@ const pushFile = (options, s3, file) => {
       }
 
       // S3 expects raw data
-      const base64data = new Buffer(data, 'binary');
+      // See: https://nodejs.org/api/buffer.html#buffer_static_method_buffer_from_string_encoding
+      const base64data = Buffer.from(data, 'binary');
 
       // Asset key
       const key = `${basePath}/${file}`;
@@ -34,10 +35,7 @@ const pushFile = (options, s3, file) => {
         if (err) {
           return reject(err);
         }
-        resolve({
-          uploadSuccess: true,
-          message: 'Successfully uploaded: ' + file
-        });
+        resolve(file);
       });
     });
   });
@@ -64,7 +62,7 @@ export const upload = (options, compilation) => {
       .map((file) => pushFile(options, s3, file));
 
     Promise.all(filePromises)
-      .then((files) => resolve({ files, message: 'Successfully uploaded files' }))
-      .catch((err) => reject({ message: err.message }));
+      .then((files) => resolve(files))
+      .catch((error) => reject({ message: error.message }));
   });
 };
